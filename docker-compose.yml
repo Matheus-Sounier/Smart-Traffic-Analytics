@@ -14,3 +14,10 @@ services:
     
     networks:
       - computer_vision_network
+
+networks:
+  computer_vision_network:
+    driver: bridge
+
+volumes:
+  oracle_dados_wsl:  
