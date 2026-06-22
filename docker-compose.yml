@@ -15,6 +15,13 @@ services:
     networks:
       - computer_vision_network
 
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
 networks:
   computer_vision_network:
     driver: bridge
