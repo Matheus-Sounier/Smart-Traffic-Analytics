@@ -174,3 +174,56 @@ results = model.train(
 - Higher epochs do not always result in better performance.
 - Monitor mAP50-95 and validation losses to identify overfitting.
 - Use `best.pt` for inference whenever possible.
+
+# Common Issues
+
+## Model file not found
+
+```text
+FileNotFoundError:
+No such file or directory
+```
+
+Verify that the model path is correct.
+
+```bash
+ls runs/detect/
+```
+
+## CUDA not available
+
+```text
+Torch not compiled with CUDA enabled
+```
+
+Check GPU support.
+
+```python
+import torch
+
+print(torch.cuda.is_available())
+```
+
+## Oracle connection failed
+
+```text
+ORA-12514
+ORA-12154
+```
+
+Verify:
+
+- Host
+- Port
+- Service name
+- Username
+- Password
+
+## Low FPS during video processing
+
+Possible causes:
+
+- High-resolution video
+- Large YOLO model
+- OCR processing overhead
+- CPU inference instead of GPU inference
