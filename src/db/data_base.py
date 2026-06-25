@@ -27,3 +27,19 @@ def init_db():
         )
     ''')
     print("table DETECTED_PLATES's created.")
+
+def save_to_database(license_plates, start_time, end_time):
+    conn = get_connection()
+    cursor = conn.cursor()
+    insert_sql = '''
+        INSERT INTO DETECTED_PLATES (plate_number, is_valid, detected_at, left_at, plate_image)
+        VALUES (:1, :2, :3, :4, :5)
+    '''
+    rows = [
+        (plate, 'Y' if is_valid else 'N', start_time, end_time, image)
+        for plate, is_valid, image in license_plates
+    ]
+    cursor.executemany(insert_sql, rows)
+    conn.commit()
+    cursor.close()
+    conn.close()
