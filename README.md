@@ -48,8 +48,6 @@ python -m venv .venv
 ```bash
 pip install -r requirements.txt
 ```
-<<<<<<< HEAD
-=======
 
 # Oracle Database Setup
 
@@ -108,3 +106,71 @@ val: valid/images
 names:
   0: license_plate
 ```
+
+## Start training
+
+```python
+from ultralytics import YOLO
+
+model = YOLO("which_yolo_version_you_want.pt")
+
+results = model.train(
+    data="dataset/data.yaml",
+    epochs=25,
+    imgsz=640,
+    batch=16,
+    project="license_plate",
+    name="training"
+)
+```
+
+## Command line training
+
+```bash
+yolo detect train \
+    model=which_yolo_version_you_want.pt \
+    data=dataset/data.yaml \
+    epochs=25 \
+    imgsz=640
+```
+
+# Resume Training
+
+## Resume from the last checkpoint
+
+```python
+from ultralytics import YOLO
+
+model = YOLO(
+    "runs/detect/license_plate_training/weights/last.pt"
+)
+
+results = model.train(
+    resume=True
+)
+```
+
+## Continue training with more epochs
+
+```python
+from ultralytics import YOLO
+
+model = YOLO(
+    "runs/detect/license_plate_training/weights/best.pt"
+)
+
+results = model.train(
+    data="dataset/data.yaml",
+    epochs=100,
+    project="license_plate",
+    name="license_plate_100epochs"
+)
+```
+
+# Notes About The Model
+
+- The model was trained to detect Mercosur license plates.
+- Detection performance depends on image quality, lighting conditions, and camera distance.
+- Higher epochs do not always result in better performance.
+- Monitor mAP50-95 and validation losses to identify overfitting.
+- Use `best.pt` for inference whenever possible.
