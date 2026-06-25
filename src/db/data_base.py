@@ -11,3 +11,19 @@ def get_connection():
         port=config('PORT'),
         service_name=config('SERVICE_NAME')
     )
+
+
+def init_db():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE DETECTED_PLATES (
+            id           NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            plate_number VARCHAR2(10)  NOT NULL,
+            is_valid     CHAR(1)       DEFAULT 'N' NOT NULL,
+            detected_at  TIMESTAMP     NOT NULL,
+            left_at      TIMESTAMP,
+            plate_image  BLOB
+        )
+    ''')
+    print("table DETECTED_PLATES's created.")
