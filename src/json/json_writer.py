@@ -8,8 +8,8 @@ def save_json(license_plates, startTime, endTime):
         "Start Time": startTime.isoformat(),
         "End Time": endTime.isoformat(),
         "License Plates": [
-            {"plate": plate, "valid": is_valid}
-            for plate, is_valid, image in license_plates
+            {"plate": plate, "valid": is_valid, "score": score}
+            for plate, is_valid, image, score in license_plates
         ]
     }
 
