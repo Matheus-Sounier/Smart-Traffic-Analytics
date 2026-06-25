@@ -16,3 +16,11 @@ def paddle_ocr(frame, x1, y1, x2, y2):
             scores = 0
         else:
             scores = int(scores * 100)
+        if scores > 60:
+            text = r[0][0]
+            best_score = scores
+    pattern = re.compile('[\W]')
+    text = pattern.sub('', text)
+    text = text.replace("???", "")
+    text = text.replace("粤", "")
+    return str(text), best_score
