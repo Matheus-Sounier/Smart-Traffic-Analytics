@@ -13,5 +13,3 @@ supervision==0.21.0
 
 oracledb==4.0.1
 python-decouple==3.8
-
-openvino==2024.0.0
