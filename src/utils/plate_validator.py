@@ -28,3 +28,22 @@ def format_license(text):
     for i, char in enumerate(text):
         result += mapping[i].get(char, char) or char
     return result
+
+def license_complies_format(text):
+    """
+    Checks if the license plate matches the Brazilian pattern
+    """
+    return bool(_MERCOSUL.match(text) or _ANTIGA.match(text))
+
+def validate_plate(text):
+    """
+    Formats and validates the plate
+    """
+    text = text.upper().replace(' ', '')
+
+    if len(text) < 6:
+        return None, False
+
+    formatted = format_license(text)
+    is_valid = license_complies_format(formatted)
+    return formatted, is_valid
