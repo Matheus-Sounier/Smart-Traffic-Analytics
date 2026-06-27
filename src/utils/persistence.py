@@ -4,7 +4,7 @@ from src.json.json_writer import save_json
 
 
 def persist_interval(license_plates, saved_plates, startTime, currentTime):
-    if (currentTime - startTime).seconds < 2:
+    if (currentTime - startTime).seconds < 1:
         return startTime
 
     endTime = currentTime
@@ -17,11 +17,11 @@ def persist_interval(license_plates, saved_plates, startTime, currentTime):
         if new_plates:
             saved_plates.update(plate for plate, *_ in new_plates.values())
             save_json(
-              [(plate, is_valid, image, score) for plate, is_valid, image, score, count in new_plates.values()],
+              [(plate, is_valid, image, score / 100.0) for plate, is_valid, image, score, count in new_plates.values()],
               startTime, endTime
             )
             save_to_database(
-              [(plate, is_valid, score, image) for plate, is_valid, image, score, count in new_plates.values()],
+              [(plate, is_valid, score / 100.0, image) for plate, is_valid, image, score, count in new_plates.values()],
               startTime, endTime
           )
 

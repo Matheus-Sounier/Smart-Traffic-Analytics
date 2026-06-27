@@ -16,7 +16,7 @@ def paddle_ocr(frame, x1, y1, x2, y2):
             scores = 0
         else:
             scores = int(scores * 100)
-        if scores > 60:
+        if scores / 100.0 > 0.6:
             text = r[0][0]
             best_score = scores
     pattern = re.compile('[\W]')
