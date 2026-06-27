@@ -22,6 +22,7 @@ def init_db():
                 id           NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 plate_number VARCHAR2(10)  NOT NULL,
                 is_valid     CHAR(1)       DEFAULT 'N' NOT NULL,
+                score        NUMBER(3,2)   DEFAULT 0.0 NOT NULL,
                 detected_at  TIMESTAMP     NOT NULL,
                 left_at      TIMESTAMP,
                 plate_image  BLOB
@@ -43,12 +44,12 @@ def save_to_database(license_plates, start_time, end_time):
     cursor = conn.cursor()
     try:
         insert_sql = '''
-            INSERT INTO DETECTED_PLATES (plate_number, is_valid, detected_at, left_at, plate_image)
-            VALUES (:1, :2, :3, :4, :5)
+            INSERT INTO DETECTED_PLATES (plate_number, is_valid, score, detected_at, left_at, plate_image)
+            VALUES (:1, :2, :3, :4, :5, :6)
         '''
         rows = [
-            (plate, 'Y' if is_valid else 'N', start_time, end_time, image)
-            for plate, is_valid, image in license_plates
+            (plate, 'Y' if is_valid else 'N', score, start_time, end_time, image)
+            for plate, is_valid, score, image in license_plates
         ]
         cursor.executemany(insert_sql, rows)
         conn.commit()
