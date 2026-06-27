@@ -32,3 +32,13 @@ def persist_interval(license_plates, saved_plates, startTime, currentTime):
             license_plates.pop(track_id, None)
 
     return endTime
+
+def persist_disappeared(license_plates, saved_plates, tracked, currentTime):
+    active_ids = set(tracked.tracker_id) if tracked.tracker_id is not None else set()
+    disappeared = set(license_plates.keys()) - active_ids
+
+    for track_id in disappeared:
+        plate, is_valid, image, score, confirm_count = license_plates.pop(track_id)
+        if plate not in saved_plates and confirm_count >= 2:
+            saved_plates.add(plate)
+
