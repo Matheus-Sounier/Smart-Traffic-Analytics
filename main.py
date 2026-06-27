@@ -10,7 +10,7 @@ import os
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-cap = cv2.VideoCapture("./Resources/carLicence4.mp4")
+cap = cv2.VideoCapture("./Resources/carLicence6.mp4")
 model = YOLO("models/best.pt")
 count = 0
 
@@ -31,7 +31,8 @@ while True:
         startTime = persist_interval(license_plates, saved_plates, startTime, currentTime)
         persist_disappeared(license_plates, saved_plates, tracked, currentTime)
 
-        cv2.imshow("Video", frame)
+        display = cv2.resize(frame, (1280, 768))
+        cv2.imshow("Video", display)
         if cv2.waitKey(1) & 0xFF == ord('1'):
             break
     else:
