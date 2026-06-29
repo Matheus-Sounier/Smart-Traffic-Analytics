@@ -17,6 +17,9 @@ Real-time automatic vehicle license plate recognition system, using YOLOv10, Byt
 - Oracle DataBase
 - PaddleOCR
 - Torch
+- OpenAI
+- Streamlit
+- OpenRouter
 
 # Installation
 
