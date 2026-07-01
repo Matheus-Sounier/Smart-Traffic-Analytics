@@ -1,0 +1,4 @@
+openai
+streamlit==1.36.0
+oracledb==4.0.1
+python-decouple==3.8
