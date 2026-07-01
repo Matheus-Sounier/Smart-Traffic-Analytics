@@ -10,4 +10,24 @@ def run_executive_agent() -> str:
         api_key=config("OPENROUTER_API_KEY")
     )
 
+    response = client.chat.completions.create(
+        model="poolside/laguna-xs.2:free",
+        messages=[
+            {
+                "role": "system",
+                "content": """You are an executive traffic analyst.
+When you receive data from plate detection, generate:
+- Executive summary in clear language for managers
+- Peak hour identified
+- Daily average of vehicles
+- Evaluation of OCR quality (average confidence)
+- Alert if there are anomalies"""
+            },
+            {
+                "role": "user",
+                "content": f"Analyze this data and generate the executive report:\n\n{metrics}"
+            }
+        ]
+    )
+
     return response.choices[0].message.content
