@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 .env
 .vs/
+.venv-anpr/
+.venv-agent/
+venv-anpr/
+venv-agent/
