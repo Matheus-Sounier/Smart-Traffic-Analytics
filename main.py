@@ -10,8 +10,12 @@ import os
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-cap = cv2.VideoCapture("./Resources/carLicence6.mp4")
-model = YOLO("models/best.pt")
+cap = cv2.VideoCapture("./Resources/carLicence4.mp4")
+
+plate_model = YOLO("models/plate/best.pt")
+
+vehicle_model = YOLO("models/vehiculos/yolov10n.pt")
+
 count = 0
 
 init_db()
@@ -26,10 +30,6 @@ while True:
         currentTime = datetime.now()
         count += 1
         print(f"Frame Number: {count}")
-
-        tracked, license_plates = process_frame(frame, count, model, license_plates)
-        startTime = persist_interval(license_plates, saved_plates, startTime, currentTime)
-        persist_disappeared(license_plates, saved_plates, tracked, currentTime)
 
         display = cv2.resize(frame, (1280, 768))
         cv2.imshow("Video", display)
