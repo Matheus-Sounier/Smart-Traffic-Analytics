@@ -36,3 +36,22 @@ def get_vehicle_crops(frame, vehicle_model):
         crops.append((crop, vx1, vy1, vx2, vy2))
 
     return crops
+
+
+def process_frame(frame, count, model, license_plates, vehicle_model=None):
+
+    if vehicle_model is not None:
+        vehicle_crops = get_vehicle_crops(frame, vehicle_model)
+
+        if not vehicle_crops:
+            return None, license_plates
+
+        all_xyxy = []
+        for crop, vx1, vy1, vx2, vy2 in vehicle_crops:
+            plate_results = model.predict(crop, conf=0.10, verbose=False)[0]
+            for box in plate_results.boxes.xyxy.cpu().numpy():
+                px1, py1, px2, py2 = box
+                all_xyxy.append([px1 + vx1, py1 + vy1, px2 + vx1, py2 + vy1])
+
+        if not all_xyxy:
+            return None, license_plates
