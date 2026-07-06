@@ -113,3 +113,33 @@ def create_simulated_calendar():
     finally:
         cursor.close()
         conn.close()
+
+def simulated_result_calendar_join():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        simulated_result_sql = '''
+            CREATE OR REPLACE VIEW vw_daily_metrics AS
+            SELECT
+                c.calendar_id,
+                c.simulated_day,
+                COUNT(d.id) AS total_vehicles,
+                ROUND(AVG(d.score),2) AS avg_confidence
+            FROM simulated_calendar c
+            LEFT JOIN detected_plates d
+                ON d.detected_at >= c.simulated_start_time
+            AND d.detected_at < c.simulated_end_time
+            GROUP BY
+                c.calendar_id,
+                c.simulated_day
+        '''
+        cursor.execute(simulated_result_sql)
+        conn.commit()
+        return True
+    except oracledb.DatabaseError as e:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
