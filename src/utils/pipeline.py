@@ -55,3 +55,14 @@ def process_frame(frame, count, model, license_plates, vehicle_model=None):
 
         if not all_xyxy:
             return None, license_plates
+
+        xyxy = np.array(all_xyxy, dtype=float)
+        conf = np.ones(len(xyxy))
+        class_id = np.zeros(len(xyxy), dtype=int)
+
+        detections = Detections(xyxy=xyxy, confidence=conf, class_id=class_id)
+        tracked = tracker.update_with_detections(detections)
+
+    else:
+        results = model.predict(frame, conf=0.10)
+        tracked = update_tracker(results)
