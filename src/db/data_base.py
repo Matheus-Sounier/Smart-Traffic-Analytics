@@ -143,3 +143,47 @@ def simulated_result_calendar_join():
     finally:
         cursor.close()
         conn.close()
+
+def simulated_result_of_days():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        simulated_days_sql = '''
+            SELECT
+                TRUNC(simulated_day, 'DD') semana,
+                SUM(total_vehicles) total
+            FROM vw_daily_metrics
+            GROUP BY TRUNC(simulated_day, 'DD')
+        '''
+        cursor.execute(simulated_days_sql)
+        days = cursor.fetchall()
+        return days
+    except oracledb.DatabaseError as e:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+def simulated_result_of_weeks():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        simulated_weeks_sql = '''
+            SELECT
+                TRUNC(simulated_day,'IW') semana,
+                SUM(total_vehicles) total
+            FROM vw_daily_metrics
+            GROUP BY TRUNC(simulated_day,'IW')
+        '''
+        cursor.execute(simulated_weeks_sql)
+        weeks = cursor.fetchall()
+        return weeks
+    except oracledb.DatabaseError as e:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
