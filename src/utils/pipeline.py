@@ -1,8 +1,14 @@
-from src.utils.tracker import update_tracker
+from src.utils.tracker import update_tracker, tracker
 from src.utils.ocr import paddle_ocr
 from src.utils.plate_validator import validate_plate
 
+from supervision import Detections
+import numpy as np
 import cv2
+
+VEHICLE_CLASSES = {2, 3, 5, 7}
+VEHICLE_CONF_THRESHOLD = 0.60
+
 
 def process_frame(frame, count, model, license_plates):
     results = model.predict(frame, conf=0.10)
