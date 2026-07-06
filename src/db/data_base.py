@@ -187,3 +187,55 @@ def simulated_result_of_weeks():
     finally:
         cursor.close()
         conn.close()
+
+def simulated_result_of_months():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        simulated_months_sql = '''
+            SELECT
+                TO_CHAR(simulated_day,'YYYY-MM') mes,
+                SUM(total_vehicles) total
+            FROM vw_daily_metrics
+            GROUP BY TO_CHAR(simulated_day,'YYYY-MM')
+        '''
+        cursor.execute(simulated_months_sql)
+        months = cursor.fetchall()
+        return months
+    except oracledb.DatabaseError as e:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_daily_metrics():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            SELECT
+                simulated_day,
+                total_vehicles,
+                avg_confidence
+            FROM vw_daily_metrics
+            ORDER BY simulated_day
+        """)
+
+        rows = cursor.fetchall()
+
+        return [
+            {
+                "date": row[0].strftime("%Y-%m-%d"),
+                "vehicles": int(row[1]),
+                "confidence": float(row[2] or 0)
+            }
+            for row in rows
+        ]
+    except oracledb.DatabaseError as e:
+        raise
+    finally:
+        cursor.close()
+        conn.close()
