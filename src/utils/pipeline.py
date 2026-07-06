@@ -90,3 +90,14 @@ def process_frame(frame, count, model, license_plates, vehicle_model=None):
                         license_plates[track_id] = (plate, is_valid, plate_image, score, 1)
                     else:
                         existing_plate, _, _, existing_score, existing_count = license_plates[track_id]
+
+                        if plate == existing_plate:
+                            new_count = existing_count + 1
+                            best_score = max(score, existing_score)
+                            best_image = plate_image if score >= existing_score else license_plates[track_id][2]
+                            license_plates[track_id] = (plate, is_valid, best_image, best_score, new_count)
+
+                        elif score > existing_score:
+                            license_plates[track_id] = (plate, is_valid, plate_image, score, 1)
+
+    return tracked, license_plates
