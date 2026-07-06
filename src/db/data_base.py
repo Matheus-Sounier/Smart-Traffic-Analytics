@@ -2,7 +2,6 @@ import oracledb
 
 from decouple import config
 
-
 def get_connection():
     return oracledb.connect(
         user=config('USER'),
@@ -38,6 +37,31 @@ def init_db():
     finally:
         cursor.close()
         conn.close()
+
+
+def init_simulated_calendar_table():
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            CREATE TABLE simulated_calendar (
+                calendar_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                simulated_day DATE,
+                simulated_start_time timestamp,
+                simulated_end_time timestamp
+            )
+        ''')
+        print("Table simulated_calendar's created.")
+    except oracledb.DatabaseError as e:
+        error, = e.args
+        if error.code == 955:  # ORA-00955
+            print("Table simulated_calendar already exists, continuing...")
+        else:
+            raise
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def save_to_database(license_plates, start_time, end_time):
     conn = get_connection()
