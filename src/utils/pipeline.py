@@ -100,4 +100,15 @@ def process_frame(frame, count, model, license_plates, vehicle_model=None):
                         elif score > existing_score:
                             license_plates[track_id] = (plate, is_valid, plate_image, score, 1)
 
+        if track_id in license_plates:
+            plate, is_valid, _, score, confirm_count = license_plates[track_id]
+            status = 'Ok' if is_valid else '?'
+            label = f"{plate} ({status}) [{confirm_count}/1]"
+            textSize = cv2.getTextSize(label, 0, fontScale=0.5, thickness=2)[0]
+            c2 = x1 + textSize[0], y1 - textSize[1] - 3
+            color = (0, 255, 0) if confirm_count >= 1 else (255, 0, 0)
+            cv2.rectangle(frame, (x1, y1), c2, (255, 0, 0), -1)
+            cv2.putText(frame, label, (x1, y1 - 2), 0, 0.5, [255, 255, 255],
+                        thickness=1, lineType=cv2.LINE_AA)
+
     return tracked, license_plates
