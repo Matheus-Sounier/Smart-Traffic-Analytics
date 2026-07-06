@@ -83,3 +83,33 @@ def save_to_database(license_plates, start_time, end_time):
     finally:
         cursor.close()
         conn.close()
+
+def create_simulated_calendar():
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        create_simulated_calendar_sql = '''
+            INSERT INTO simulated_calendar (
+                simulated_day,
+                simulated_start_time,
+                simulated_end_time
+            )
+            SELECT
+                DATE '2026-06-01' + (LEVEL - 1),
+                TO_TIMESTAMP('2026-06-28 12:40:00',
+                            'YYYY-MM-DD HH24:MI:SS')
+                    + NUMTODSINTERVAL((LEVEL - 1) * 20, 'MINUTE'),
+                TO_TIMESTAMP('2026-06-28 12:40:00',
+                            'YYYY-MM-DD HH24:MI:SS')
+                    + NUMTODSINTERVAL(LEVEL * 20, 'MINUTE')
+            FROM dual
+            CONNECT BY LEVEL <= 30
+        '''
+        cursor.execute(create_simulated_calendar_sql)
+        conn.commit()
+    except oracledb.DatabaseError as e:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
