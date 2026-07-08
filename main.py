@@ -10,7 +10,7 @@ import os
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-cap = cv2.VideoCapture("./Resources/carLicence4.mp4")
+cap = cv2.VideoCapture("./Resources/video-vehicle/carLicence4.mp4")
 
 plate_model = YOLO("models/plate/best.pt")
 
