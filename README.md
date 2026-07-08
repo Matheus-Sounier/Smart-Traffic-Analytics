@@ -6,11 +6,15 @@ Real-time automatic vehicle license plate recognition system, using YOLOv10, Byt
 
 ### Detection
 
-<img width="1600" height="600" alt="gif of the detection" src="./img/test-video-2x.gif" />
+<img width="1300" height="500" alt="gif of the detection" src="./img/test-video-2x.gif" />
 
 ### Dashboard
 
-<img width="1600" height="600" alt="screenshot of the dashboard" src="./img/dashboard.gif" />
+<img width="1300" height="500" alt="screenshot of the dashboard" src="./img/dashboard.gif" />
+
+### Dashboard - one month of monitoring
+
+<img width="1000" height="400" alt="screenshot of the dashboard" src="./img/full-dashboard-month.png" />
 
 # Technologies
 
